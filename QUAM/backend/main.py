@@ -20,7 +20,7 @@ app = FastAPI()
 # Allow CORS for all origins (for development)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For development, allows all origins. For production, use your frontend URL.
+    allow_origins=["https://quam-sigma.vercel.app"],  # For development, allows all origins. For production, use your frontend URL.
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -29,7 +29,7 @@ app.add_middleware(
 class VideoRequest(BaseModel):
     url: str
     lang: str = None
-    model: str = "small"
+    model: str = "tiny"
 
 # In-memory job store (for demo; use Redis or DB for production)
 jobs = {}
@@ -45,7 +45,7 @@ def split_audio(audio_filename, chunk_length_ms=300000):  # 5 minutes
     return chunks
 
 def transcribe_job(job_id, url, lang=None):
-    print(f"Starting job {job_id} for URL: {url} with lang: {lang} and model: small")
+    print(f"Starting job {job_id} for URL: {url} with lang: {lang} and model: tiny")
     audio_filename = f"audio_{uuid.uuid4()}.mp3"
     try:
         ydl_opts = {
@@ -57,8 +57,8 @@ def transcribe_job(job_id, url, lang=None):
             ydl.download([url])
         print(f"Downloaded audio to {audio_filename}")
 
-        model = whisper.load_model('small')
-        print(f"Loaded Whisper model: small")
+        model = whisper.load_model('tiny')
+        print(f"Loaded Whisper model: tiny")
 
         # Split audio into chunks
         chunk_files = split_audio(audio_filename)
@@ -157,7 +157,7 @@ async def transcribe_audio(file: UploadFile = File(...), lang: str = Form(None))
         else:
             audio_path = temp_audio_filename
 
-        model = whisper.load_model('small')
+        model = whisper.load_model('tiny')
         print("Before splitting audio")
         chunk_files = split_audio(audio_path)
         print("Splitting audio")
@@ -198,3 +198,6 @@ def proxy_audio(url: str):
         tmp.write(r.content)
         tmp_path = tmp.name
     return FileResponse(tmp_path, media_type="audio/webm") 
+@app.get("/")
+def read_root():
+       return {"message": "QUAM backend is running."}
