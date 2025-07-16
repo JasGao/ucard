@@ -1,124 +1,0 @@
-nohup: ignoring input
-INFO:     Started server process [58545]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     218.255.180.86:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     218.255.180.86:0 - "GET /openapi.json HTTP/1.0" 200 OK
-ffmpeg version N-120239-g7c91ae9419-20250711 Copyright (c) 2000-2025 the FFmpeg developers
-  built with gcc 15.1.0 (crosstool-NG 1.27.0.42_35c1e72)
-  configuration: --prefix=/ffbuild/prefix --pkg-config-flags=--static --pkg-config=pkg-config --cross-prefix=x86_64-ffbuild-linux-gnu- --arch=x86_64 --target-os=linux --enable-gpl --enable-version3 --disable-debug --enable-iconv --enable-zlib --enable-libfribidi --enable-gmp --enable-libxml2 --enable-openssl --enable-lzma --enable-fontconfig --enable-libharfbuzz --enable-libfreetype --enable-libvorbis --enable-opencl --enable-libpulse --enable-libvmaf --enable-libxcb --enable-xlib --enable-amf --enable-libaom --enable-libaribb24 --enable-avisynth --enable-chromaprint --enable-libdav1d --enable-libdavs2 --enable-libdvdread --enable-libdvdnav --disable-libfdk-aac --enable-ffnvcodec --enable-cuda-llvm --enable-frei0r --enable-libgme --enable-libkvazaar --enable-libaribcaption --enable-libass --enable-libbluray --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librist --enable-libssh --enable-libtheora --enable-libvpx --enable-libwebp --enable-libzmq --enable-lv2 --enable-libvpl --enable-openal --enable-liboapv --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenh264 --enable-libopenjpeg --enable-libopenmpt --enable-librav1e --enable-librubberband --disable-schannel --enable-sdl2 --enable-libsnappy --enable-libsoxr --enable-libsrt --enable-libsvtav1 --enable-libtwolame --enable-libuavs3d --enable-libdrm --enable-vaapi --enable-libvidstab --enable-vulkan --enable-libshaderc --enable-libplacebo --enable-libvvenc --enable-libx264 --enable-libx265 --enable-libxavs2 --enable-libxvid --enable-libzimg --enable-libzvbi --extra-cflags=-DLIBTWOLAME_STATIC --extra-cxxflags= --extra-libs='-ldl -lgomp' --extra-ldflags=-pthread --extra-ldexeflags=-pie --cc=x86_64-ffbuild-linux-gnu-gcc --cxx=x86_64-ffbuild-linux-gnu-g++ --ar=x86_64-ffbuild-linux-gnu-gcc-ar --ranlib=x86_64-ffbuild-linux-gnu-gcc-ranlib --nm=x86_64-ffbuild-linux-gnu-gcc-nm --extra-version=20250711
-  libavutil      60.  4.101 / 60.  4.101
-  libavcodec     62.  6.100 / 62.  6.100
-  libavformat    62.  1.102 / 62.  1.102
-  libavdevice    62.  0.100 / 62.  0.100
-  libavfilter    11.  1.100 / 11.  1.100
-  libswscale      9.  0.100 /  9.  0.100
-  libswresample   6.  0.100 /  6.  0.100
-Input #0, matroska,webm, from 'uploaded_2dc1c801-c400-47f3-880b-67552c9df784.mp3':
-  Metadata:
-    encoder         : google/video-file
-  Duration: 00:03:55.46, start: -0.007000, bitrate: 99 kb/s
-  Stream #0:0(eng): Audio: opus, 48000 Hz, stereo, fltp, start -0.007000 (default)
-Stream mapping:
-  Stream #0:0 -> #0:0 (opus (native) -> mp3 (libmp3lame))
-Press [q] to stop, [?] for help
-Output #0, mp3, to 'uploaded_2dc1c801-c400-47f3-880b-67552c9df784_converted.mp3':
-  Metadata:
-    TSSE            : Lavf62.1.102
-  Stream #0:0(eng): Audio: mp3, 48000 Hz, stereo, fltp (default)
-    Metadata:
-      encoder         : Lavc62.6.100 libmp3lame
-size=     256KiB time=00:00:22.66 bitrate=  92.5kbits/s speed=45.1x elapsed=0:00:00.50    size=     512KiB time=00:00:45.51 bitrate=  92.2kbits/s speed=45.3x elapsed=0:00:01.00    size=    1024KiB time=00:01:12.19 bitrate= 116.2kbits/s speed=  48x elapsed=0:00:01.50    size=    1536KiB time=00:01:38.88 bitrate= 127.2kbits/s speed=49.3x elapsed=0:00:02.00    size=    1792KiB time=00:02:03.46 bitrate= 118.9kbits/s speed=49.3x elapsed=0:00:02.50    size=    2048KiB time=00:02:27.27 bitrate= 113.9kbits/s speed=  49x elapsed=0:00:03.00    size=    2560KiB time=00:02:49.95 bitrate= 123.4kbits/s speed=48.5x elapsed=0:00:03.50    size=    2816KiB time=00:03:10.87 bitrate= 120.9kbits/s speed=47.6x elapsed=0:00:04.00    size=    3328KiB time=00:03:33.53 bitrate= 127.7kbits/s speed=47.4x elapsed=0:00:04.50    [opus @ 0x56010fb356c0] Error parsing Opus packet header.
-[out#0/mp3 @ 0x56010fb32b80] video:0KiB audio:3679KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.006264%
-size=    3679KiB time=00:03:55.44 bitrate= 128.0kbits/s speed=47.1x elapsed=0:00:04.99    
-/usr/local/lib/python3.9/site-packages/whisper/transcribe.py:132: UserWarning: FP16 is not supported on CPU; using FP32 instead
-  warnings.warn("FP16 is not supported on CPU; using FP32 instead")
-Saved uploaded file
-Before splitting audio
-Splitting audio
-INFO:     218.255.180.86:0 - "POST /transcribe-audio HTTP/1.0" 500 Internal Server Error
-ffmpeg version N-120239-g7c91ae9419-20250711 Copyright (c) 2000-2025 the FFmpeg developers
-  built with gcc 15.1.0 (crosstool-NG 1.27.0.42_35c1e72)
-  configuration: --prefix=/ffbuild/prefix --pkg-config-flags=--static --pkg-config=pkg-config --cross-prefix=x86_64-ffbuild-linux-gnu- --arch=x86_64 --target-os=linux --enable-gpl --enable-version3 --disable-debug --enable-iconv --enable-zlib --enable-libfribidi --enable-gmp --enable-libxml2 --enable-openssl --enable-lzma --enable-fontconfig --enable-libharfbuzz --enable-libfreetype --enable-libvorbis --enable-opencl --enable-libpulse --enable-libvmaf --enable-libxcb --enable-xlib --enable-amf --enable-libaom --enable-libaribb24 --enable-avisynth --enable-chromaprint --enable-libdav1d --enable-libdavs2 --enable-libdvdread --enable-libdvdnav --disable-libfdk-aac --enable-ffnvcodec --enable-cuda-llvm --enable-frei0r --enable-libgme --enable-libkvazaar --enable-libaribcaption --enable-libass --enable-libbluray --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librist --enable-libssh --enable-libtheora --enable-libvpx --enable-libwebp --enable-libzmq --enable-lv2 --enable-libvpl --enable-openal --enable-liboapv --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenh264 --enable-libopenjpeg --enable-libopenmpt --enable-librav1e --enable-librubberband --disable-schannel --enable-sdl2 --enable-libsnappy --enable-libsoxr --enable-libsrt --enable-libsvtav1 --enable-libtwolame --enable-libuavs3d --enable-libdrm --enable-vaapi --enable-libvidstab --enable-vulkan --enable-libshaderc --enable-libplacebo --enable-libvvenc --enable-libx264 --enable-libx265 --enable-libxavs2 --enable-libxvid --enable-libzimg --enable-libzvbi --extra-cflags=-DLIBTWOLAME_STATIC --extra-cxxflags= --extra-libs='-ldl -lgomp' --extra-ldflags=-pthread --extra-ldexeflags=-pie --cc=x86_64-ffbuild-linux-gnu-gcc --cxx=x86_64-ffbuild-linux-gnu-g++ --ar=x86_64-ffbuild-linux-gnu-gcc-ar --ranlib=x86_64-ffbuild-linux-gnu-gcc-ranlib --nm=x86_64-ffbuild-linux-gnu-gcc-nm --extra-version=20250711
-  libavutil      60.  4.101 / 60.  4.101
-  libavcodec     62.  6.100 / 62.  6.100
-  libavformat    62.  1.102 / 62.  1.102
-  libavdevice    62.  0.100 / 62.  0.100
-  libavfilter    11.  1.100 / 11.  1.100
-  libswscale      9.  0.100 /  9.  0.100
-  libswresample   6.  0.100 /  6.  0.100
-Input #0, matroska,webm, from 'uploaded_2e45ac3b-20bd-48ec-8f53-98d1d894e4e2.mp3':
-  Metadata:
-    encoder         : google/video-file
-  Duration: 00:03:55.46, start: -0.007000, bitrate: 99 kb/s
-  Stream #0:0(eng): Audio: opus, 48000 Hz, stereo, fltp, start -0.007000 (default)
-Stream mapping:
-  Stream #0:0 -> #0:0 (opus (native) -> mp3 (libmp3lame))
-Press [q] to stop, [?] for help
-Output #0, mp3, to 'uploaded_2e45ac3b-20bd-48ec-8f53-98d1d894e4e2_converted.mp3':
-  Metadata:
-    TSSE            : Lavf62.1.102
-  Stream #0:0(eng): Audio: mp3, 48000 Hz, stereo, fltp (default)
-    Metadata:
-      encoder         : Lavc62.6.100 libmp3lame
-size=     256KiB time=00:00:19.78 bitrate= 106.0kbits/s speed=39.5x elapsed=0:00:00.50    size=     512KiB time=00:00:39.55 bitrate= 106.0kbits/s speed=39.5x elapsed=0:00:01.00    size=    1024KiB time=00:01:06.43 bitrate= 126.3kbits/s speed=44.2x elapsed=0:00:01.50    size=    1280KiB time=00:01:29.09 bitrate= 117.7kbits/s speed=44.4x elapsed=0:00:02.00    size=    1536KiB time=00:01:49.25 bitrate= 115.2kbits/s speed=43.6x elapsed=0:00:02.50    size=    1792KiB time=00:02:08.64 bitrate= 114.1kbits/s speed=42.8x elapsed=0:00:03.00    size=    2304KiB time=00:02:29.76 bitrate= 126.0kbits/s speed=42.7x elapsed=0:00:03.50    size=    2560KiB time=00:02:51.27 bitrate= 122.4kbits/s speed=42.7x elapsed=0:00:04.01    size=    2816KiB time=00:03:12.77 bitrate= 119.7kbits/s speed=42.7x elapsed=0:00:04.51    size=    3328KiB time=00:03:34.80 bitrate= 126.9kbits/s speed=42.8x elapsed=0:00:05.01    size=    3584KiB time=00:03:54.58 bitrate= 125.2kbits/s speed=42.5x elapsed=0:00:05.51    [opus @ 0x561496aeb6c0] Error parsing Opus packet header.
-[out#0/mp3 @ 0x561496ae8b80] video:0KiB audio:3679KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.006264%
-size=    3679KiB time=00:03:55.44 bitrate= 128.0kbits/s speed=42.4x elapsed=0:00:05.54    
-/usr/local/lib/python3.9/site-packages/whisper/transcribe.py:132: UserWarning: FP16 is not supported on CPU; using FP32 instead
-  warnings.warn("FP16 is not supported on CPU; using FP32 instead")
-Saved uploaded file
-Before splitting audio
-Splitting audio
-Starting transcription
-Finished transcription
-INFO:     218.255.180.86:0 - "POST /transcribe-audio HTTP/1.0" 200 OK
-Proxying audio from: https://s5-audio.12388101.xyz/dl_Ati2I-04y0I-ac8770327763a7a8c6e75cbc661a4351724.webm
-Downloaded audio response: 200
-INFO:     218.255.180.86:0 - "GET /proxy-audio?url=https%3A%2F%2Fs5-audio.12388101.xyz%2Fdl_Ati2I-04y0I-ac8770327763a7a8c6e75cbc661a4351724.webm HTTP/1.0" 200 OK
-/usr/local/lib/python3.9/site-packages/whisper/transcribe.py:132: UserWarning: FP16 is not supported on CPU; using FP32 instead
-  warnings.warn("FP16 is not supported on CPU; using FP32 instead")
-Saved uploaded file
-Before splitting audio
-Splitting audio
-Starting transcription
-Finished transcription
-INFO:     218.255.180.86:0 - "POST /transcribe-audio HTTP/1.0" 200 OK
-INFO:     113.215.189.244:29796 - "GET / HTTP/1.1" 200 OK
-INFO:     113.215.189.248:0 - "GET / HTTP/1.0" 200 OK
-INFO:     113.215.189.248:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
-INFO:     218.255.180.86:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     218.255.180.86:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     113.215.189.254:54417 - "GET / HTTP/1.1" 200 OK
-INFO:     113.215.189.254:0 - "GET / HTTP/1.0" 200 OK
-INFO:     113.215.189.254:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
-INFO:     113.215.189.254:24358 - "GET / HTTP/1.1" 200 OK
-INFO:     113.215.189.254:0 - "GET / HTTP/1.0" 200 OK
-INFO:     113.215.189.254:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
-ffmpeg version N-120239-g7c91ae9419-20250711 Copyright (c) 2000-2025 the FFmpeg developers
-  built with gcc 15.1.0 (crosstool-NG 1.27.0.42_35c1e72)
-  configuration: --prefix=/ffbuild/prefix --pkg-config-flags=--static --pkg-config=pkg-config --cross-prefix=x86_64-ffbuild-linux-gnu- --arch=x86_64 --target-os=linux --enable-gpl --enable-version3 --disable-debug --enable-iconv --enable-zlib --enable-libfribidi --enable-gmp --enable-libxml2 --enable-openssl --enable-lzma --enable-fontconfig --enable-libharfbuzz --enable-libfreetype --enable-libvorbis --enable-opencl --enable-libpulse --enable-libvmaf --enable-libxcb --enable-xlib --enable-amf --enable-libaom --enable-libaribb24 --enable-avisynth --enable-chromaprint --enable-libdav1d --enable-libdavs2 --enable-libdvdread --enable-libdvdnav --disable-libfdk-aac --enable-ffnvcodec --enable-cuda-llvm --enable-frei0r --enable-libgme --enable-libkvazaar --enable-libaribcaption --enable-libass --enable-libbluray --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librist --enable-libssh --enable-libtheora --enable-libvpx --enable-libwebp --enable-libzmq --enable-lv2 --enable-libvpl --enable-openal --enable-liboapv --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenh264 --enable-libopenjpeg --enable-libopenmpt --enable-librav1e --enable-librubberband --disable-schannel --enable-sdl2 --enable-libsnappy --enable-libsoxr --enable-libsrt --enable-libsvtav1 --enable-libtwolame --enable-libuavs3d --enable-libdrm --enable-vaapi --enable-libvidstab --enable-vulkan --enable-libshaderc --enable-libplacebo --enable-libvvenc --enable-libx264 --enable-libx265 --enable-libxavs2 --enable-libxvid --enable-libzimg --enable-libzvbi --extra-cflags=-DLIBTWOLAME_STATIC --extra-cxxflags= --extra-libs='-ldl -lgomp' --extra-ldflags=-pthread --extra-ldexeflags=-pie --cc=x86_64-ffbuild-linux-gnu-gcc --cxx=x86_64-ffbuild-linux-gnu-g++ --ar=x86_64-ffbuild-linux-gnu-gcc-ar --ranlib=x86_64-ffbuild-linux-gnu-gcc-ranlib --nm=x86_64-ffbuild-linux-gnu-gcc-nm --extra-version=20250711
-  libavutil      60.  4.101 / 60.  4.101
-  libavcodec     62.  6.100 / 62.  6.100
-  libavformat    62.  1.102 / 62.  1.102
-  libavdevice    62.  0.100 / 62.  0.100
-  libavfilter    11.  1.100 / 11.  1.100
-  libswscale      9.  0.100 /  9.  0.100
-  libswresample   6.  0.100 /  6.  0.100
-Input #0, matroska,webm, from 'uploaded_5ff692ad-dec5-4434-9bbe-1707a3cbb2aa.mp3':
-  Metadata:
-    encoder         : google/video-file
-  Duration: 00:03:55.46, start: -0.007000, bitrate: 99 kb/s
-  Stream #0:0(eng): Audio: opus, 48000 Hz, stereo, fltp, start -0.007000 (default)
-Stream mapping:
-  Stream #0:0 -> #0:0 (opus (native) -> mp3 (libmp3lame))
-Press [q] to stop, [?] for help
-Output #0, mp3, to 'uploaded_5ff692ad-dec5-4434-9bbe-1707a3cbb2aa_converted.mp3':
-  Metadata:
-    TSSE            : Lavf62.1.102
-  Stream #0:0(eng): Audio: mp3, 48000 Hz, stereo, fltp (default)
-    Metadata:
-      encoder         : Lavc62.6.100 libmp3lame
-size=     256KiB time=00:00:20.35 bitrate= 103.0kbits/s speed=40.5x elapsed=0:00:00.50    size=     512KiB time=00:00:40.32 bitrate= 104.0kbits/s speed=40.1x elapsed=0:00:01.00    size=    1024KiB time=00:01:07.39 bitrate= 124.5kbits/s speed=44.7x elapsed=0:00:01.50    size=    1280KiB time=00:01:34.08 bitrate= 111.4kbits/s speed=46.8x elapsed=0:00:02.01    size=    1792KiB time=00:01:58.66 bitrate= 123.7kbits/s speed=47.2x elapsed=0:00:02.51    size=    2048KiB time=00:02:22.85 bitrate= 117.4kbits/s speed=47.4x elapsed=0:00:03.01    size=    2560KiB time=00:02:49.15 bitrate= 124.0kbits/s speed=48.1x elapsed=0:00:03.51    size=    2816KiB time=00:03:14.88 bitrate= 118.4kbits/s speed=48.5x elapsed=0:00:04.01    size=    3328KiB time=00:03:40.61 bitrate= 123.6kbits/s speed=48.8x elapsed=0:00:04.51    [opus @ 0x55765aa946c0] Error parsing Opus packet header.
-[out#0/mp3 @ 0x55765aa91b80] video:0KiB audio:3679KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.006264%
-size=    3679KiB time=00:03:55.44 bitrate= 128.0kbits/s speed=48.6x elapsed=0:00:04.84    
