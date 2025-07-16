@@ -1,4 +1,9 @@
 import React, { useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function Home() {
   const [transcript, setTranscript] = useState("");
@@ -20,9 +25,7 @@ export default function Home() {
     return match ? match[1] : null;
   }
 
-  // Remove API_KEYS and AUDIO_API_KEYS from frontend for security
   // All RapidAPI requests are now proxied through /api/rapidapi
-
   async function fetchWithKeyRotation(videoId, lang) {
     try {
       const response = await fetch('/api/rapidapi', {
@@ -136,120 +139,79 @@ export default function Home() {
   }
 
   return (
-    <div className="container">
-      <h1>Quam Youtube Transcript</h1>
-      <div className="card">
-        <div className="form-modern">
-          <div style={{ marginBottom: 16, color: "#444", fontSize: "1.05rem" }}>
+    <div className="container min-h-screen flex flex-col items-center justify-center bg-background">
+      <h1 className="text-4xl font-bold mb-6 mt-8">Quam Youtube Transcript</h1>
+      <Card className="w-full max-w-xl shadow-lg">
+        <CardContent className="p-8">
+          <div className="mb-6 text-base text-muted-foreground">
             Enter a YouTube URL <b>or</b> upload an audio file below. Pick one method to get your transcript.
           </div>
-          <form onSubmit={handleYoutubeSubmit}>
-            <div className="input-group">
-              <input
+          <form onSubmit={handleYoutubeSubmit} className="space-y-4">
+            <div className="flex flex-col gap-2">
+              <Input
                 type="text"
                 ref={youtubeUrlRef}
                 placeholder="Input the YouTube URL"
                 disabled={loading}
+                className=""
               />
             </div>
-            <div className="input-group">
-              <label htmlFor="language-select">Transcript Language:</label>
-              <select
-                id="language-select"
-                value={lang}
-                onChange={e => setLang(e.target.value)}
-                disabled={loading}
-              >
-                <option value="en">English</option>
-                <option value="zh-Hant">Cantonese</option>
-              </select>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="language-select">Transcript Language:</Label>
+              <Select value={lang} onValueChange={setLang} disabled={loading}>
+                <SelectTrigger id="language-select">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="en">English</SelectItem>
+                  <SelectItem value="zh-Hant">Cantonese</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <button type="submit" disabled={loading}>
+            <Button type="submit" disabled={loading} className="w-full">
               Get Transcript from YouTube
-            </button>
+            </Button>
           </form>
-        </div>
-        <div id="manual-upload-section" style={{ marginTop: 20 }}>
-          <form onSubmit={handleAudioUpload}>
-            <div className="input-group">
-              <label htmlFor="audio-file">
-                Or upload audio file (mp3, wav, m4a):
-              </label>
-              <input
-                type="file"
-                id="audio-file"
-                accept="audio/*"
-                ref={fileInputRef}
-                disabled={loading}
-              />
-            </div>
-            <button type="submit" disabled={loading}>
-              Transcribe Uploaded Audio
-            </button>
-          </form>
-        </div>
-        <div className="transcript-label">
-          Transcript
-          {loading && (
-            <span id="whisper-loading">
-              <span
-                className="spinner"
-                style={{
-                  display: "inline-block",
-                  width: 18,
-                  height: 18,
-                  border: "3px solid #007bff",
-                  borderTop: "3px solid #fff",
-                  borderRadius: "50%",
-                  animation: "spin 1s linear infinite",
-                  verticalAlign: "middle",
-                  marginLeft: 8,
-                }}
-              ></span>
-            </span>
-          )}
-        </div>
-        <div id="transcript-box" className="transcript-box">
-          {transcript}
-        </div>
-      </div>
-      {toast && <div className="toast show">{toast}</div>}
-      <footer
-        style={{
-          textAlign: "center",
-          marginTop: 32,
-          color: "#888",
-          fontSize: "0.95rem",
-        }}
-      >
-        2025 @ Made with ❤️ from iDDY
+          <div id="manual-upload-section" className="mt-8">
+            <form onSubmit={handleAudioUpload} className="space-y-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="audio-file">
+                  Or upload audio file (mp3, wav, m4a):
+                </Label>
+                <Input
+                  type="file"
+                  id="audio-file"
+                  accept="audio/*"
+                  ref={fileInputRef}
+                  disabled={loading}
+                  className=""
+                />
+              </div>
+              <Button type="submit" disabled={loading} className="w-full">
+                Transcribe Uploaded Audio
+              </Button>
+            </form>
+          </div>
+          <div className="transcript-label font-semibold mt-8 mb-2 text-lg">
+            Transcript
+            {loading && (
+              <span id="whisper-loading" className="ml-2 align-middle">
+                <span
+                  className="spinner inline-block w-5 h-5 border-2 border-primary border-t-white rounded-full animate-spin align-middle"
+                  style={{ verticalAlign: "middle" }}
+                ></span>
+              </span>
+            )}
+          </div>
+          <div id="transcript-box" className="transcript-box min-h-[120px] bg-muted rounded p-4 text-base text-foreground whitespace-pre-wrap border border-border mb-2">
+            {transcript}
+          </div>
+        </CardContent>
+      </Card>
+      {toast && <div className="toast show fixed top-8 left-1/2 -translate-x-1/2 bg-destructive text-white px-8 py-4 rounded shadow-lg z-50 text-lg font-medium">{toast}</div>}
+      <footer className="text-center mt-12 text-muted-foreground text-base">
+        2025 @ Made with <span className="text-red-500">❤️</span> from iDDY
       </footer>
-      <style jsx>{`
-        .toast {
-          position: fixed;
-          top: 32px;
-          left: 50%;
-          transform: translateX(-50%);
-          min-width: 240px;
-          max-width: 90vw;
-          background: #ff4d4f;
-          color: #fff;
-          padding: 16px 32px;
-          border-radius: 8px;
-          font-size: 1.1rem;
-          font-weight: 500;
-          box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-          opacity: 1;
-          pointer-events: auto;
-          z-index: 9999;
-          transition: opacity 0.4s, top 0.4s;
-        }
-        .toast.show {
-          opacity: 1;
-          pointer-events: auto;
-          top: 56px;
-        }
-      `}</style>
     </div>
   );
 } 
