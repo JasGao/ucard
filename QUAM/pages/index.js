@@ -20,70 +20,40 @@ export default function Home() {
     return match ? match[1] : null;
   }
 
-  const API_KEYS = [
-    // Add your RapidAPI keys here
-    "YOUR_RAPIDAPI_KEY_1",
-    "YOUR_RAPIDAPI_KEY_2"
-  ];
-  const AUDIO_API_KEYS = [
-    // Add your RapidAPI audio keys here
-    "YOUR_AUDIO_API_KEY_1",
-    "YOUR_AUDIO_API_KEY_2"
-  ];
+  // Remove API_KEYS and AUDIO_API_KEYS from frontend for security
+  // All RapidAPI requests are now proxied through /api/rapidapi
 
   async function fetchWithKeyRotation(videoId, lang) {
-    let lastError = null;
-    for (let i = 0; i < API_KEYS.length; i++) {
-      try {
-        const response = await fetch(
-          `https://youtube-transcriptor.p.rapidapi.com/transcript?video_id=${videoId}&lang=${lang}`,
-          {
-            method: "GET",
-            headers: {
-              "x-rapidapi-host": "youtube-transcriptor.p.rapidapi.com",
-              "x-rapidapi-key": API_KEYS[i],
-            },
-          }
-        );
-        if (response.status === 429) continue;
-        if (!response.ok) throw new Error(await response.text());
-        return await response.json();
-      } catch (err) {
-        lastError = err;
-        if (!err.message.includes("429")) break;
-      }
+    try {
+      const response = await fetch('/api/rapidapi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'transcript', videoId, lang }),
+      });
+      if (!response.ok) throw new Error(await response.text());
+      return await response.json();
+    } catch (err) {
+      throw err;
     }
-    throw lastError || new Error("All API keys exhausted or invalid.");
   }
 
   async function downloadAudioWithRapidAPI(videoId) {
-    const RAPIDAPI_AUDIO_URL =
-      "https://youtube-video-fast-downloader-24-7.p.rapidapi.com/download_audio";
-    let lastError = null;
-    for (let i = 0; i < AUDIO_API_KEYS.length; i++) {
-      try {
-        const url = `${RAPIDAPI_AUDIO_URL}/${videoId}?quality=251`;
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            "x-rapidapi-key": AUDIO_API_KEYS[i],
-            "x-rapidapi-host": "youtube-video-fast-downloader-24-7.p.rapidapi.com",
-          },
-        });
-        if (response.status === 429) continue;
-        if (!response.ok) throw new Error(await response.text());
-        const data = await response.json();
-        if (!data.file) throw new Error("No audio file URL in API response.");
-        const audioRes = await fetch(data.file);
-        if (!audioRes.ok) throw new Error("Failed to download audio file.");
-        const blob = await audioRes.blob();
-        return blob;
-      } catch (err) {
-        lastError = err;
-        if (!err.message.includes("429")) break;
-      }
+    try {
+      const response = await fetch('/api/rapidapi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'audio', videoId }),
+      });
+      if (!response.ok) throw new Error(await response.text());
+      const data = await response.json();
+      if (!data.file) throw new Error('No audio file URL in API response.');
+      const audioRes = await fetch(data.file);
+      if (!audioRes.ok) throw new Error('Failed to download audio file.');
+      const blob = await audioRes.blob();
+      return blob;
+    } catch (err) {
+      throw err;
     }
-    throw lastError || new Error("All audio API keys exhausted or invalid.");
   }
 
   async function transcribeAudioBlob(audioBlob, lang) {
