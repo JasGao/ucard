@@ -142,11 +142,11 @@ export default function Home() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#e9edfa] py-10">
       <h1 className="text-4xl font-bold mb-8">Quam Youtube Transcript</h1>
       <Card className="w-full max-w-lg bg-white shadow-lg border-none">
-        <CardContent className="p-8">
+        <CardContent className="pt-10 pb-8 px-8">
           <form onSubmit={handleTranscribe} className="space-y-8">
             {/* Step 1: Input Audio */}
             <div>
-              <div className="mb-2 font-semibold text-lg">Step 1: Input Audio</div>
+              <div className="mb-2 font-semibold text-lg mt-0">Step 1: Input Audio</div>
               <div className="flex gap-6 mb-4">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
