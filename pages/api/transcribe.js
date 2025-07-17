@@ -1,6 +1,7 @@
 import formidable from "formidable";
 import fs from "fs";
 import OpenAI from "openai";
+import { File as FormDataFile } from "formdata-node";
 
 export const config = {
   api: {
@@ -44,13 +45,18 @@ export default async function handler(req, res) {
     const lang = fields.lang === "zh-Hant" ? "zh" : fields.lang || "en";
 
     try {
-      const stream = fs.createReadStream(file.filepath);
-      console.log('Sending file stream to OpenAI:', {
+      const fileBuffer = fs.readFileSync(file.filepath);
+      const fileObj = new FormDataFile(
+        [fileBuffer],
+        file.originalFilename || "audio.mp3",
+        { type: file.mimetype || "audio/mpeg" }
+      );
+      console.log('Sending file as File object to OpenAI:', {
         filename: file.originalFilename || "audio.mp3",
         contentType: file.mimetype || "audio/mpeg"
       });
       const response = await openai.audio.transcriptions.create({
-        file: stream,
+        file: fileObj,
         model: "whisper-1",
         language: lang
       });
