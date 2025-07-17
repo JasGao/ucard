@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { chunkAudioWithOverlap, transcribeChunks } from "@/lib/chunkAndTranscribe";
 
 export default function Home() {
   const [transcript, setTranscript] = useState("");
@@ -142,6 +141,8 @@ export default function Home() {
         return;
       }
       setStatus("Chunking audio...");
+      // Dynamically import the helpers only on the client
+      const { chunkAudioWithOverlap, transcribeChunks } = await import("@/lib/chunkAndTranscribe");
       const chunks = await chunkAudioWithOverlap(files[0], 240, 5, setProgress, setStatus); // 4min, 5s overlap
       setStatus("Uploading and transcribing...");
       const transcripts = await transcribeChunks(chunks, lang, setProgress, setStatus);
