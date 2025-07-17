@@ -52,7 +52,8 @@ export default function Home() {
       if (!response.ok) throw new Error(await response.text());
       const data = await response.json();
       if (!data.file) throw new Error('No audio file URL in API response.');
-      const audioRes = await fetch(data.file);
+      // Use backend proxy to bypass CORS
+      const audioRes = await fetch(`/api/proxy-audio?url=${encodeURIComponent(data.file)}`);
       if (!audioRes.ok) throw new Error('Failed to download audio file.');
       const blob = await audioRes.blob();
       return blob;

@@ -9,6 +9,7 @@ export const config = {
 };
 
 export default async function handler(req, res) {
+  console.log('Method:', req.method);
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -43,21 +44,13 @@ export default async function handler(req, res) {
     const lang = fields.lang === "zh-Hant" ? "zh" : fields.lang || "en";
 
     try {
-      const buffer = fs.readFileSync(file.filepath);
-      const fileObj = {
-        value: buffer,
-        options: {
-          filename: file.originalFilename || "audio.mp3",
-          contentType: file.mimetype || "audio/mpeg"
-        }
-      };
-      console.log('Sending file object to OpenAI:', {
-        filename: fileObj.options.filename,
-        contentType: fileObj.options.contentType,
-        bufferLength: buffer.length
+      const stream = fs.createReadStream(file.filepath);
+      console.log('Sending file stream to OpenAI:', {
+        filename: file.originalFilename || "audio.mp3",
+        contentType: file.mimetype || "audio/mpeg"
       });
       const response = await openai.audio.transcriptions.create({
-        file: fileObj,
+        file: stream,
         model: "whisper-1",
         language: lang
       });
