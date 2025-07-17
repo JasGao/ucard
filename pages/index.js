@@ -9,7 +9,8 @@ export default function Home() {
   const [transcript, setTranscript] = useState("");
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState("");
-  const [lang, setLang] = useState("en");
+  const [lang, setLang] = useState("zh-Hant"); // Default to Cantonese
+  const [inputType, setInputType] = useState("url");
   const youtubeUrlRef = useRef();
   const fileInputRef = useRef();
 
@@ -25,7 +26,6 @@ export default function Home() {
     return match ? match[1] : null;
   }
 
-  // All RapidAPI requests are now proxied through /api/rapidapi
   async function fetchWithKeyRotation(videoId, lang) {
     try {
       const response = await fetch('/api/rapidapi', {
@@ -85,129 +85,143 @@ export default function Home() {
     setLoading(false);
   }
 
-  async function handleYoutubeSubmit(e) {
+  async function handleTranscribe(e) {
     e.preventDefault();
     setTranscript("");
     setLoading(true);
-    const url = youtubeUrlRef.current.value.trim();
-    if (!url) {
-      showToast("Please enter a YouTube URL.");
-      setLoading(false);
-      return;
-    }
-    const videoId = extractVideoId(url);
-    if (!videoId) {
-      setTranscript("Invalid YouTube URL.");
-      setLoading(false);
-      return;
-    }
-    setTranscript("Loading...");
-    let rapidApiLang = lang;
-    if (lang === "zh-Hant") rapidApiLang = "zh-HK";
-    try {
-      const data = await fetchWithKeyRotation(videoId, rapidApiLang);
-      if (Array.isArray(data) && data[0] && data[0].transcriptionAsText) {
-        setTranscript(data[0].transcriptionAsText);
+    if (inputType === "url") {
+      const url = youtubeUrlRef.current.value.trim();
+      if (!url) {
+        showToast("Please enter a YouTube URL.");
         setLoading(false);
         return;
       }
-    } catch (err) {
-      // ignore, try next step
-    }
-    try {
-      setTranscript("Trying to download audio for Whisper transcription...");
-      const audioBlob = await downloadAudioWithRapidAPI(videoId);
-      await transcribeAudioBlob(audioBlob, lang);
+      const videoId = extractVideoId(url);
+      if (!videoId) {
+        setTranscript("Invalid YouTube URL.");
+        setLoading(false);
+        return;
+      }
+      setTranscript("Loading...");
+      let rapidApiLang = lang;
+      if (lang === "zh-Hant") rapidApiLang = "zh-HK";
+      try {
+        const data = await fetchWithKeyRotation(videoId, rapidApiLang);
+        if (Array.isArray(data) && data[0] && data[0].transcriptionAsText) {
+          setTranscript(data[0].transcriptionAsText);
+          setLoading(false);
+          return;
+        }
+      } catch (err) {
+        // ignore, try next step
+      }
+      try {
+        setTranscript("Trying to download audio for Whisper transcription...");
+        const audioBlob = await downloadAudioWithRapidAPI(videoId);
+        await transcribeAudioBlob(audioBlob, lang);
+        setLoading(false);
+        return;
+      } catch (err) {
+        showToast("Automatic audio download failed: " + (err.message || err));
+        setTranscript("");
+      }
       setLoading(false);
-      return;
-    } catch (err) {
-      showToast("Automatic audio download failed: " + (err.message || err));
-      setTranscript("");
+    } else if (inputType === "file") {
+      const files = fileInputRef.current.files;
+      if (!files || !files[0]) {
+        showToast("Please select an audio file.");
+        setLoading(false);
+        return;
+      }
+      await transcribeAudioBlob(files[0], lang);
+      setLoading(false);
     }
-    setLoading(false);
-  }
-
-  async function handleAudioUpload(e) {
-    e.preventDefault();
-    setTranscript("");
-    const files = fileInputRef.current.files;
-    if (!files || !files[0]) {
-      showToast("Please select an audio file.");
-      return;
-    }
-    await transcribeAudioBlob(files[0], lang);
   }
 
   return (
-    <div className="container min-h-screen flex flex-col items-center justify-center bg-background">
-      <h1 className="text-4xl font-bold mb-6 mt-8">Quam Youtube Transcript</h1>
-      <Card className="w-full max-w-xl shadow-lg">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#e9edfa] py-10">
+      <h1 className="text-4xl font-bold mb-8">Quam Youtube Transcript</h1>
+      <Card className="w-full max-w-lg bg-white shadow-lg border-none">
         <CardContent className="p-8">
-          <div className="mb-6 text-base text-muted-foreground">
-            Enter a YouTube URL <b>or</b> upload an audio file below. Pick one method to get your transcript.
-          </div>
-          <form onSubmit={handleYoutubeSubmit} className="space-y-4">
-            <div className="flex flex-col gap-2">
-              <Input
-                type="text"
-                ref={youtubeUrlRef}
-                placeholder="Input the YouTube URL"
-                disabled={loading}
-                className=""
-              />
+          <form onSubmit={handleTranscribe} className="space-y-8">
+            {/* Step 1: Input Audio */}
+            <div>
+              <div className="mb-2 font-semibold text-lg">Step 1: Input Audio</div>
+              <div className="flex gap-6 mb-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="inputType"
+                    value="url"
+                    checked={inputType === "url"}
+                    onChange={() => setInputType("url")}
+                  />
+                  YouTube URL
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="inputType"
+                    value="file"
+                    checked={inputType === "file"}
+                    onChange={() => setInputType("file")}
+                  />
+                  Upload Audio File
+                </label>
+              </div>
+              {inputType === "url" ? (
+                <Input
+                  type="text"
+                  ref={youtubeUrlRef}
+                  placeholder="Input the YouTube URL"
+                  disabled={loading}
+                  className="mb-2"
+                />
+              ) : (
+                <Input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="audio/*"
+                  disabled={loading}
+                  className="mb-2"
+                />
+              )}
             </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="language-select">Transcript Language:</Label>
+            {/* Step 2: Language */}
+            <div>
+              <div className="mb-2 font-semibold text-lg">Step 2: Transcript Language</div>
               <Select value={lang} onValueChange={setLang} disabled={loading}>
                 <SelectTrigger id="language-select">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="en">English</SelectItem>
                   <SelectItem value="zh-Hant">Cantonese</SelectItem>
+                  <SelectItem value="en">English</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            <Button type="submit" disabled={loading} className="w-full">
-              Get Transcript from YouTube
-            </Button>
-          </form>
-          <div id="manual-upload-section" className="mt-8">
-            <form onSubmit={handleAudioUpload} className="space-y-4">
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="audio-file">
-                  Or upload audio file (mp3, wav, m4a):
-                </Label>
-                <Input
-                  type="file"
-                  id="audio-file"
-                  accept="audio/*"
-                  ref={fileInputRef}
-                  disabled={loading}
-                  className=""
-                />
-              </div>
-              <Button type="submit" disabled={loading} className="w-full">
-                Transcribe Uploaded Audio
+            {/* Step 3: Transcribe Button */}
+            <div>
+              <Button type="submit" disabled={loading} className="w-full h-12 text-lg">
+                {loading ? "Transcribing..." : "Transcribe"}
               </Button>
-            </form>
-          </div>
-          <div className="transcript-label font-semibold mt-8 mb-2 text-lg">
-            Transcript
-            {loading && (
-              <span id="whisper-loading" className="ml-2 align-middle">
-                <span
-                  className="spinner inline-block w-5 h-5 border-2 border-primary border-t-white rounded-full animate-spin align-middle"
-                  style={{ verticalAlign: "middle" }}
-                ></span>
-              </span>
-            )}
-          </div>
-          <div id="transcript-box" className="transcript-box min-h-[120px] bg-muted rounded p-4 text-base text-foreground whitespace-pre-wrap border border-border mb-2">
-            {transcript}
-          </div>
+            </div>
+          </form>
         </CardContent>
       </Card>
+      {/* Transcript Output */}
+      <div className="w-full max-w-lg mt-8">
+        {transcript && (
+          <Card className="bg-white shadow border-none">
+            <CardContent className="p-6">
+              <div className="font-semibold mb-2 text-lg">Transcript</div>
+              <div className="whitespace-pre-wrap text-base text-gray-800">
+                {transcript}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
       {toast && <div className="toast show fixed top-8 left-1/2 -translate-x-1/2 bg-destructive text-white px-8 py-4 rounded shadow-lg z-50 text-lg font-medium">{toast}</div>}
       <footer className="text-center mt-12 text-muted-foreground text-base">
         2025 @ Made with <span className="text-red-500">❤️</span> from iDDY

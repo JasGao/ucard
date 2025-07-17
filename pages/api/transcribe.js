@@ -1,6 +1,6 @@
 import formidable from "formidable";
 import fs from "fs";
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 
 export const config = {
   api: {
@@ -20,20 +20,17 @@ export default async function handler(req, res) {
     const file = files.file;
     if (!file) return res.status(400).json({ error: "No file uploaded" });
 
-    const openai = new OpenAIApi(
-      new Configuration({
-        apiKey: process.env.OPENAI_API_KEY,
-      })
-    );
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
 
     try {
-      const response = await openai.createTranscription(
-        fs.createReadStream(file.filepath),
-        "whisper-1",
-        undefined,
-        fields.lang || "en"
-      );
-      res.status(200).json({ transcript: response.data.text });
+      const response = await openai.audio.transcriptions.create({
+        file: fs.createReadStream(file.filepath),
+        model: "whisper-1",
+        language: fields.lang || "en"
+      });
+      res.status(200).json({ transcript: response.text });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
