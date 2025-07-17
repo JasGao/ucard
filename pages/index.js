@@ -18,7 +18,7 @@ export default function Home() {
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
-  const BACKEND_URL = 'https://quamyo.duckdns.org/api/chunk-and-transcribe';
+  const BACKEND_URL = 'https://quam123.duckdns.org/api/chunk-and-transcribe';
 
   function showToast(message) {
     setToast(message);
