@@ -44,7 +44,13 @@ export default async function handler(req, res) {
 
     try {
       const response = await openai.audio.transcriptions.create({
-        file: fs.createReadStream(file.filepath),
+        file: {
+          value: fs.createReadStream(file.filepath),
+          options: {
+            filename: file.originalFilename || "audio.mp3",
+            contentType: file.mimetype || "audio/mpeg"
+          }
+        },
         model: "whisper-1",
         language: lang
       });
