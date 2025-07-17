@@ -142,82 +142,28 @@ export default function Home() {
         setLoading(false);
         return;
       }
-      if (typeof window === "undefined") {
-        setError("Audio chunking only works in the browser. Please use a supported browser.");
-        setLoading(false);
-        return;
-      }
-      setStatus("Chunking audio...");
+      setStatus("Uploading audio to backend...");
       setError("");
       try {
-        // Dynamically import ffmpeg only in the browser
-        const ffmpegModule = await import("@ffmpeg/ffmpeg");
-        const createFFmpeg = ffmpegModule.createFFmpeg;
-        const fetchFile = ffmpegModule.fetchFile;
-        if (typeof createFFmpeg !== 'function' || typeof fetchFile !== 'function') {
-          throw new Error('ffmpeg.wasm not loaded correctly.');
-        }
-        const ffmpeg = createFFmpeg({ log: true });
-        if (!ffmpeg.isLoaded()) await ffmpeg.load();
-        setStatus("Analyzing audio...");
-        ffmpeg.FS("writeFile", "input.mp3", await fetchFile(files[0]));
-        let duration = 0;
-        ffmpeg.setLogger(({ message }) => {
-          const match = message.match(/Duration: (\\d+):(\\d+):(\\d+\\.\\d+)/);
-          if (match) {
-            const [, h, m, s] = match;
-            duration = +h * 3600 + +m * 60 + +s;
-          }
+        const formData = new FormData();
+        formData.append("file", files[0]);
+        // If your backend supports language, add: formData.append("lang", lang);
+
+        const response = await fetch(BACKEND_URL, {
+          method: "POST",
+          body: formData,
         });
-        await ffmpeg.run("-i", "input.mp3");
-        const chunkDurationSec = 240;
-        const overlapSec = 5;
-        const chunks = [];
-        let start = 0;
-        let idx = 0;
-        setStatus("Chunking audio...");
-        while (start < duration) {
-          const outputName = `chunk_${idx}.mp3`;
-          const actualDuration = Math.min(chunkDurationSec, duration - start);
-          await ffmpeg.run(
-            "-ss", `${start}`,
-            "-t", `${actualDuration}`,
-            "-i", "input.mp3",
-            "-acodec", "copy",
-            outputName
-          );
-          const data = ffmpeg.FS("readFile", outputName);
-          chunks.push(new File([data.buffer], outputName, { type: files[0].type }));
-          ffmpeg.FS("unlink", outputName);
-          start += chunkDurationSec - overlapSec;
-          idx++;
-          setProgress(Math.min(100, Math.round((start / duration) * 100)));
+        if (!response.ok) throw new Error(await response.text());
+        const data = await response.json();
+        if (data.transcript) {
+          setTranscript(data.transcript + "\n\n(Transcribed by Whisper)");
+        } else {
+          showToast("No transcript returned.");
+          setTranscript("");
         }
-        ffmpeg.FS("unlink", "input.mp3");
-        setStatus("Uploading and transcribing...");
-        const transcripts = [];
-        for (let i = 0; i < chunks.length; i++) {
-          setProgress(Math.round((i / chunks.length) * 100));
-          const formData = new FormData();
-          formData.append("file", chunks[i]);
-          formData.append("lang", lang);
-          try {
-            const res = await fetch(BACKEND_URL, {
-              method: "POST",
-              body: formData,
-            });
-            if (!res.ok) throw new Error(await res.text());
-            const data = await res.json();
-            transcripts.push(data.transcript);
-          } catch (err) {
-            console.error(`Transcription failed for chunk ${i}:`, err);
-            transcripts.push(`[Error transcribing chunk ${i + 1}]`);
-          }
-        }
-        setTranscript(transcripts.join(" ") + "\n\n(Transcribed by Whisper)");
         setStatus("Done!");
       } catch (err) {
-        setError(err.message || "Audio chunking or transcription failed.");
+        setError(err.message || "Audio upload or transcription failed.");
         setTranscript("");
         setStatus("");
       }
