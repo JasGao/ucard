@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { isBrowser } from "@/lib/chunkAndTranscribe";
 
 export default function Home() {
   const [transcript, setTranscript] = useState("");
