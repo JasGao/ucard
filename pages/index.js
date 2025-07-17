@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { chunkAudioWithOverlap, transcribeChunks } from "@/lib/chunkAndTranscribe";
 
 export default function Home() {
   const [transcript, setTranscript] = useState("");
@@ -15,6 +16,8 @@ export default function Home() {
   const fileInputRef = useRef();
   // Add a state to track if user should be prompted to use Y2Mate
   const [showY2Mate, setShowY2Mate] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [status, setStatus] = useState("");
 
   function showToast(message) {
     setToast(message);
@@ -138,7 +141,12 @@ export default function Home() {
         setLoading(false);
         return;
       }
-      await transcribeAudioBlob(files[0], lang);
+      setStatus("Chunking audio...");
+      const chunks = await chunkAudioWithOverlap(files[0], 240, 5, setProgress, setStatus); // 4min, 5s overlap
+      setStatus("Uploading and transcribing...");
+      const transcripts = await transcribeChunks(chunks, lang, setProgress, setStatus);
+      setTranscript(transcripts.join(" ") + "\n\n(Transcribed by Whisper)");
+      setStatus("Done!");
       setLoading(false);
     }
   }
@@ -219,6 +227,12 @@ export default function Home() {
                 {loading ? "Transcribing..." : "Transcribe"}
               </Button>
             </div>
+            {loading && (
+              <div>
+                <div>Progress: {progress}%</div>
+                <div>Status: {status}</div>
+              </div>
+            )}
             {/* Transcript Output (inside card) */}
             {transcript && (
               <div className="mt-8">
