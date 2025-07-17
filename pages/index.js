@@ -18,6 +18,7 @@ export default function Home() {
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
+  const BACKEND_URL = 'http://8.222.227.197:3001/api/chunk-and-transcribe';
 
   function showToast(message) {
     setToast(message);
@@ -72,7 +73,7 @@ export default function Home() {
     formData.append("file", audioBlob, "audio.mp3");
     formData.append("lang", lang);
     try {
-      const response = await fetch("/api/transcribe", {
+      const response = await fetch(BACKEND_URL, {
         method: "POST",
         body: formData,
       });
@@ -201,7 +202,7 @@ export default function Home() {
           formData.append("file", chunks[i]);
           formData.append("lang", lang);
           try {
-            const res = await fetch("/api/transcribe", {
+            const res = await fetch(BACKEND_URL, {
               method: "POST",
               body: formData,
             });
