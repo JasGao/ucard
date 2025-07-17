@@ -43,14 +43,21 @@ export default async function handler(req, res) {
     const lang = fields.lang === "zh-Hant" ? "zh" : fields.lang || "en";
 
     try {
+      const buffer = fs.readFileSync(file.filepath);
+      const fileObj = {
+        value: buffer,
+        options: {
+          filename: file.originalFilename || "audio.mp3",
+          contentType: file.mimetype || "audio/mpeg"
+        }
+      };
+      console.log('Sending file object to OpenAI:', {
+        filename: fileObj.options.filename,
+        contentType: fileObj.options.contentType,
+        bufferLength: buffer.length
+      });
       const response = await openai.audio.transcriptions.create({
-        file: {
-          value: fs.createReadStream(file.filepath),
-          options: {
-            filename: file.originalFilename || "audio.mp3",
-            contentType: file.mimetype || "audio/mpeg"
-          }
-        },
+        file: fileObj,
         model: "whisper-1",
         language: lang
       });
