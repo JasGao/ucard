@@ -20,6 +20,21 @@ export default async function handler(req, res) {
     const file = files.file;
     if (!file) return res.status(400).json({ error: "No file uploaded" });
 
+    // Logging file info
+    try {
+      const stats = fs.statSync(file.filepath);
+      console.log('File info:', {
+        path: file.filepath,
+        size: file.size,
+        type: file.mimetype,
+        name: file.originalFilename,
+        exists: stats.isFile(),
+        actualSize: stats.size
+      });
+    } catch (e) {
+      console.log('File stat error:', e);
+    }
+
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });

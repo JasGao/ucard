@@ -171,16 +171,14 @@ export default function Home() {
                     onChange={() => setInputType("file")}
                   />
                   Upload Audio File
-                  {showY2Mate && (
-                    <a
-                      href="https://en.y2mate.is/wXuA/youtube-to-mp3.html"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="ml-2 px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200 text-sm font-medium border border-blue-200 transition"
-                    >
-                      Download MP3
-                    </a>
-                  )}
+                  <a
+                    href="https://en.y2mate.is/wXuA/youtube-to-mp3.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ml-2 px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200 text-sm font-medium border border-blue-200 transition"
+                  >
+                    Download MP3
+                  </a>
                 </label>
               </div>
               {inputType === "url" ? (
