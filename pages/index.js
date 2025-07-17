@@ -13,6 +13,8 @@ export default function Home() {
   const [inputType, setInputType] = useState("url");
   const youtubeUrlRef = useRef();
   const fileInputRef = useRef();
+  // Add a state to track if user should be prompted to use Y2Mate
+  const [showY2Mate, setShowY2Mate] = useState(false);
 
   function showToast(message) {
     setToast(message);
@@ -89,6 +91,7 @@ export default function Home() {
     e.preventDefault();
     setTranscript("");
     setLoading(true);
+    setShowY2Mate(false);
     if (inputType === "url") {
       const url = youtubeUrlRef.current.value.trim();
       if (!url) {
@@ -122,7 +125,8 @@ export default function Home() {
         setLoading(false);
         return;
       } catch (err) {
-        showToast("Automatic audio download failed: " + (err.message || err));
+        showToast("All API keys are used up. Please manually download the audio and upload it below.");
+        setShowY2Mate(true);
         setTranscript("");
       }
       setLoading(false);
@@ -167,6 +171,16 @@ export default function Home() {
                     onChange={() => setInputType("file")}
                   />
                   Upload Audio File
+                  {showY2Mate && (
+                    <a
+                      href="https://en.y2mate.is/wXuA/youtube-to-mp3.html"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-2 px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200 text-sm font-medium border border-blue-200 transition"
+                    >
+                      Download MP3
+                    </a>
+                  )}
                 </label>
               </div>
               {inputType === "url" ? (
@@ -222,7 +236,23 @@ export default function Home() {
           </Card>
         )}
       </div>
-      {toast && <div className="toast show fixed top-8 left-1/2 -translate-x-1/2 bg-destructive text-white px-8 py-4 rounded shadow-lg z-50 text-lg font-medium">{toast}</div>}
+      {toast && (
+        <div className="fixed top-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-6 py-4 rounded-lg shadow-xl border border-red-300 bg-white text-red-700 text-base font-semibold animate-fade-in">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-500">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          {toast}
+        </div>
+      )}
+      <style jsx global>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(-16px) scale(0.98); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.3s ease;
+        }
+      `}</style>
       <footer className="text-center mt-12 text-muted-foreground text-base">
         2025 @ Made with <span className="text-red-500">❤️</span> from iDDY
       </footer>
