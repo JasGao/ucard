@@ -24,11 +24,14 @@ export default async function handler(req, res) {
       apiKey: process.env.OPENAI_API_KEY,
     });
 
+    // Convert zh-Hant to zh for Whisper API
+    const lang = fields.lang === "zh-Hant" ? "zh" : fields.lang || "en";
+
     try {
       const response = await openai.audio.transcriptions.create({
         file: fs.createReadStream(file.filepath),
         model: "whisper-1",
-        language: fields.lang || "en"
+        language: lang
       });
       res.status(200).json({ transcript: response.text });
     } catch (e) {

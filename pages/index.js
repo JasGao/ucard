@@ -220,22 +220,18 @@ export default function Home() {
                 {loading ? "Transcribing..." : "Transcribe"}
               </Button>
             </div>
+            {/* Transcript Output (inside card) */}
+            {transcript && (
+              <div className="mt-8">
+                <div className="font-semibold mb-2 text-lg">Transcript</div>
+                <div className="whitespace-pre-wrap text-base text-gray-800 bg-gray-50 rounded p-4 border border-gray-200">
+                  {transcript}
+                </div>
+              </div>
+            )}
           </form>
         </CardContent>
       </Card>
-      {/* Transcript Output */}
-      <div className="w-full max-w-lg mt-8">
-        {transcript && (
-          <Card className="bg-white shadow border-none">
-            <CardContent className="p-6">
-              <div className="font-semibold mb-2 text-lg">Transcript</div>
-              <div className="whitespace-pre-wrap text-base text-gray-800">
-                {transcript}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-      </div>
       {toast && (
         <div className="fixed top-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-6 py-4 rounded-lg shadow-xl border border-red-300 bg-white text-red-700 text-base font-semibold animate-fade-in">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-500">
