@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { isBrowser } from "@/lib/chunkAndTranscribe";
 
 export default function Home() {
   const [transcript, setTranscript] = useState("");
@@ -17,6 +18,7 @@ export default function Home() {
   const [showY2Mate, setShowY2Mate] = useState(false);
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
 
   function showToast(message) {
     setToast(message);
@@ -140,14 +142,25 @@ export default function Home() {
         setLoading(false);
         return;
       }
+      if (!isBrowser()) {
+        setError("Audio chunking only works in the browser. Please use a supported browser.");
+        setLoading(false);
+        return;
+      }
       setStatus("Chunking audio...");
-      // Dynamically import the helpers only on the client
-      const { chunkAudioWithOverlap, transcribeChunks } = await import("@/lib/chunkAndTranscribe");
-      const chunks = await chunkAudioWithOverlap(files[0], 240, 5, setProgress, setStatus); // 4min, 5s overlap
-      setStatus("Uploading and transcribing...");
-      const transcripts = await transcribeChunks(chunks, lang, setProgress, setStatus);
-      setTranscript(transcripts.join(" ") + "\n\n(Transcribed by Whisper)");
-      setStatus("Done!");
+      setError("");
+      try {
+        const { chunkAudioWithOverlap, transcribeChunks } = await import("@/lib/chunkAndTranscribe");
+        const chunks = await chunkAudioWithOverlap(files[0], 240, 5, setProgress, setStatus); // 4min, 5s overlap
+        setStatus("Uploading and transcribing...");
+        const transcripts = await transcribeChunks(chunks, lang, setProgress, setStatus);
+        setTranscript(transcripts.join(" ") + "\n\n(Transcribed by Whisper)");
+        setStatus("Done!");
+      } catch (err) {
+        setError(err.message || "Audio chunking or transcription failed.");
+        setTranscript("");
+        setStatus("");
+      }
       setLoading(false);
     }
   }
@@ -233,6 +246,9 @@ export default function Home() {
                 <div>Progress: {progress}%</div>
                 <div>Status: {status}</div>
               </div>
+            )}
+            {error && (
+              <div className="text-red-600 font-semibold mt-2">{error}</div>
             )}
             {/* Transcript Output (inside card) */}
             {transcript && (
