@@ -1,17 +1,7 @@
-"use client";
-
-import { useState } from "react";
 import Image from "next/image";
-import VerificationModal from "./component/verification-modal";
 
 export default function Home() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleVerificationSuccess = (phoneNumber: string) => {
-    console.log("Phone verified:", phoneNumber);
-    // You can add additional logic here, like showing a success message
-    // or redirecting to another page
-  };
+  const loginUrl = "https://ucard-dev.iddy.asia/login";
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -22,12 +12,12 @@ export default function Home() {
             <div className="w-8 h-8 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded"></div>
             <span className="text-white">UCard with FUN</span>
           </div>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-semibold"
+          <a
+            href={loginUrl}
+            className="inline-flex px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-semibold"
           >
             JOIN NOW
-          </button>
+          </a>
         </div>
       </nav>
 
@@ -144,12 +134,12 @@ export default function Home() {
           <p className="text-xl text-white/80 mb-8 leading-relaxed">
             The world is your map, and Ucard is your controller. Sign up now to receive a Starter Loot Box featuring bonus Ucredits and a "Rookie" badge to kick off your adventure. Your first quest begins the moment you tap below.
           </p>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="px-10 py-5 bg-blue-600 text-white rounded-lg text-xl font-bold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-xl"
+          <a
+            href={loginUrl}
+            className="inline-flex px-10 py-5 bg-blue-600 text-white rounded-lg text-xl font-bold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-xl"
           >
             Start Your Quest! 🎯
-          </button>
+          </a>
         </div>
       </section>
 
@@ -160,9 +150,6 @@ export default function Home() {
             <div className="text-white/60 mb-4 md:mb-0 font-medium flex items-center gap-2">
               <span>© 2024</span>
               <span className="text-white font-bold">UCard with FUN</span>
-              <span>. Made with</span>
-              <span className="animate-pulse">💜</span>
-              <span>and fun!</span>
             </div>
             <div className="flex gap-6">
               <a
@@ -187,13 +174,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
-      {/* Verification Modal */}
-      <VerificationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onVerificationSuccess={handleVerificationSuccess}
-      />
     </div>
   );
 }
