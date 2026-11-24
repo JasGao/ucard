@@ -1,0 +1,81 @@
+.stage {
+  min-block-size: calc(100svh - 12rem);
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  padding: clamp(1.25rem, 4vw, 4rem) max(1rem, 5vw);
+  background: #ebeee4;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  width: min(100%, 61rem);
+  min-height: 35rem;
+  border: 1px solid var(--line);
+  border-radius: .8rem;
+  background: var(--paper);
+  box-shadow: 0 .6rem 2.5rem rgb(32 62 54 / 7%);
+}
+
+.panel {
+  min-width: 0;
+  padding: clamp(1.5rem, 4vw, 3.8rem);
+  align-self: center;
+}
+
+.panel h1 {
+  margin-block: .95rem .7rem;
+  font-size: clamp(2.6rem, 4.2vw, 3.75rem);
+}
+
+.panel h1 + p {
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+  line-height: 1.55;
+}
+
+.photo { position: relative; overflow: hidden; border-radius: 0 .75rem .75rem 0; }
+.photo img { object-fit: cover; }
+
+.panel form { display: grid; }
+.panel label { font-weight: 600; }
+.panel input {
+  min-width: 0;
+  width: 100%;
+  padding: .65rem .9rem;
+  border: 1px solid var(--muted);
+  border-radius: .35rem;
+  margin: .35rem 0 1rem;
+  background: white;
+  font: inherit;
+}
+
+.panel input[inputmode="numeric"] { letter-spacing: .14em; }
+
+.panel :global(.button) { width: 100%; }
+.panel button { cursor: pointer; }
+.panel :global(.button):disabled { opacity: .6; cursor: default; }
+.panel input:focus-visible, .panel button:focus-visible { outline: 3px solid #ce8018; outline-offset: 3px; }
+.panel [role="alert"] { color: #8c3428; margin-bottom: .85rem; }
+
+.panel .resend:disabled { color: var(--muted); cursor: default; text-decoration: none; font-variant-numeric: tabular-nums; }
+
+.options { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem .75rem; }
+.options .resend { margin-inline: 0; }
+
+.resend {
+  display: block;
+  margin: .5rem auto 0;
+  padding: .55rem;
+  color: var(--pine);
+  text-decoration: underline;
+  text-underline-offset: .25em;
+}
+
+@media (max-width: 719px) {
+  .stage { align-content: start; padding-block: 1.5rem; }
+  .card { grid-template-columns: minmax(0, 1fr); max-width: 28rem; min-height: 0; }
+  .panel { padding: clamp(1.15rem, 5.8vw, 2rem); }
+  .photo { display: none; }
+}
